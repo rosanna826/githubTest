@@ -7,25 +7,30 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javafx.scene.input.KeyEvent;
 import java.awt.Font;
-
-//import java.awt.GridLayout;
 import java.util.Scanner;
 
 /**
  * Write a description of class TextGUIDemo here.
  *
- * @author (RY)
+ * @author (Hei Lam Rosanna Yip)
  * @version (24.08.2021)
  */
 public class TextGUIDemo extends JFrame implements ActionListener {
+    //indetify the type 
+    private String expression = "";
+    private double first_number;
+    private double second_number;
+    private double result;
+    private char sign = '+';
+    private char opps; //perform +-*/! under if statement
+    private double oops; //perform whole numbers under ! 
+    
+    //Interface - panel 
     JPanel glassPanel;
-
-    //for the buttons 
+    //Interface - buttons 
     private JButton btn0;
     private JButton btn1;
     private JButton btn2;
@@ -49,37 +54,28 @@ public class TextGUIDemo extends JFrame implements ActionListener {
     private JButton btn20; // )
     private JButton btn21; // OFF
     private JButton btn22; // = 
-
+    //
     JTextField textField;
-    //display
-    private String expression = "";
-    private double first_number;
-    private double second_number;
-    //private char operator;
-    private double result;
-    private char sign = '+';
-
+    //
     /**
      * Constructor for objects of class TextGUIDemo
      */
     public TextGUIDemo()
     {
+        //Title
         super ("        My PROG5001 - Calculator (version)  ");
         setLayout(null);
-        // create panels
+        //Interface - create panels
         JFrame frame = new JFrame();
         glassPanel = new JPanel();
         glassPanel.setLayout(null);
         glassPanel.setBackground(Color.white);
         glassPanel.setSize(380,480);
         glassPanel.setLocation(10,10);
-        //GridLayout layout = new GridLayout(0,5);
-        //layout.setHgap(10);
-        //layout.setVgap(10);
         //
         add(glassPanel);
 
-        //left = width, right = hight
+        //Interface - design of the buttons;left = width, right = hight
         btn1 = new JButton("1");
         btn1.setSize(50,50);
         btn1.setLocation(10,80);    
@@ -100,7 +96,7 @@ public class TextGUIDemo extends JFrame implements ActionListener {
         btn3.setBackground(Color.lightGray);
         btn12.setBackground(Color.lightGray);
         btn17.setBackground(Color.lightGray);
-
+        //
         btn4 = new JButton("4");
         btn4.setSize(50,50);
         btn4.setLocation(10,150);
@@ -121,7 +117,7 @@ public class TextGUIDemo extends JFrame implements ActionListener {
         btn6.setBackground(Color.lightGray);
         btn13.setBackground(Color.lightGray);
         btn18.setBackground(Color.lightGray);
-
+        //
         btn7 = new JButton("7");
         btn7.setSize(50,50);
         btn7.setLocation(10,220);
@@ -142,41 +138,41 @@ public class TextGUIDemo extends JFrame implements ActionListener {
         btn9.setBackground(Color.lightGray);
         btn14.setBackground(Color.lightGray);
         btn19.setBackground(Color.lightGray);
-
+        //
         btn10 = new JButton("+/-");
         btn10.setSize(50,50);
         btn10.setLocation(10,280);
-        btn10.setBackground(Color.lightGray);
         btn0 = new JButton("0");
         btn0.setSize(50,50);
         btn0.setLocation(70,280);
-        btn0.setBackground(Color.lightGray);
         btn11 = new JButton(" . ");
         btn11.setSize(50,50);
         btn11.setLocation(130,280);
-        btn11.setBackground(Color.lightGray);
         btn15 = new JButton("/");
         btn15.setSize(50,50);
         btn15.setLocation(190,280);
-        btn15.setBackground(Color.lightGray);
         btn20 = new JButton(")");
         btn20.setSize(80,50);
         btn20.setLocation(250,280);
+        btn10.setBackground(Color.lightGray);
+        btn0.setBackground(Color.lightGray);
+        btn11.setBackground(Color.lightGray);
+        btn15.setBackground(Color.lightGray);
         btn20.setBackground(Color.lightGray);
-
+        //
         btn22 = new JButton("=");
         btn22.setSize(170,50);
         btn22.setLocation(10,340);
-        btn22.setBackground(Color.lightGray);
         btn16 = new JButton("!");
         btn16.setSize(50,50);
         btn16.setLocation(190,340); 
-        btn16.setBackground(Color.lightGray);
         btn21= new JButton("OFF"); //EXIT
         btn21.setSize(80,50);
         btn21.setLocation(250,340);
+        btn22.setBackground(Color.lightGray);
+        btn16.setBackground(Color.lightGray);
         btn21.setBackground(Color.orange);
-
+        
         // add buttons back to the panel
         glassPanel.add(btn0);
         glassPanel.add(btn1);
@@ -202,7 +198,8 @@ public class TextGUIDemo extends JFrame implements ActionListener {
         glassPanel.add(btn21);
         glassPanel.add(btn22);
 
-        //ActionListener
+        //ActionListener & ActionCommand
+        //when you click the buttons, what text you would like to link to
         btn0.addActionListener(this);
         btn0.setActionCommand("btnzero");
         btn1.addActionListener(this);
@@ -250,137 +247,139 @@ public class TextGUIDemo extends JFrame implements ActionListener {
         btn22.addActionListener(this);
         btn22.setActionCommand("btntwentytwo");
 
-        //display
+        //display for the textfield
         textField = new JTextField();
         textField.setSize(320,60);
         textField.setLocation(20,20);
-        Font displayFont = new Font("New Roman",Font.BOLD,20);
+        Font displayFont = new Font("New Roman",Font.BOLD,18);
         textField.setFont(displayFont);
         add(textField);
-        //textField.KeyListener(this);
 
-        // initialise instance vatiables
+        //for the frame design
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setCursor(CROSSHAIR_CURSOR);
         setPreferredSize(new Dimension (400,500));
         pack();
 
-        //setFocusable(this);
-        //addKeyListener(this);
     }
 
     public void actionPerformed(ActionEvent e) {
+        //the content of the buttons 
         String cmd = e.getActionCommand();
-        if (cmd ==("btnone")) { 
+        if (cmd ==("btnone")) {
+            oops =3;
             if (sign =='-'){
             expression = expression + "-1";
-            //sign = '+';
         } else
             expression = expression + "1";
-
         }else 
         if (cmd==("btntwo")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-2";
-            //sign = '+';
              } else
             expression = expression + "2";
         } else 
         if (cmd==("btnthree")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-3";
-            //sign = '+';
              } else
             expression = expression + "3";
         } else 
         if (cmd==("btnfour")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-4";
-            //sign = '+';
              } else
             expression = expression + "4";
         } else 
         if (cmd==("btnfive")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-5";
-            //sign = '+';
              } else
             expression = expression + "5";
         } else 
         if (cmd==("btnsix")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-6";
-            //sign = '+';
              } else
             expression = expression + "6";
         } else 
         if (cmd==("btnseven")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-7";
-            //sign = '+';
              } else
             expression = expression + "7";
         } else 
         if (cmd==("btneight")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-8";
-            //sign = '+';
              } else
             expression = expression + "8";
         } else 
         if (cmd==("btnnine")) {
+            oops = 3;
             if (sign =='-'){
             expression = expression + "-9";
-            //sign = '+';
              } else
             expression = expression + "9";
         } else 
         if (cmd==("btnzero")) {
+            oops = 3;
             expression = expression + "0";
         } else 
-        if (cmd==("btnten")) { //+/-
+        if (cmd==("btnten")) { 
+            //button +/-
             if (sign=='+'){
                 sign = '-';
             }else 
                  sign = '+';
-            //double ops;
-            // ops = expression * (-1);
-            //expression = String.valueOf(ops);
         } else 
         if (cmd==("btneleven")) {
+            //button for decimal
             expression = expression + ".";
         } else 
         if (cmd==("btntwelve")) {
-            expression = expression + " " + "+" + " ";
-            //operator = '+';
+            //button +
+            oops = 2;
+            opps = '+';
+            expression = expression + " + ";
         } else 
         if (cmd==("btnthirteen")) {
-            expression = expression + " " + "-" + " ";
-            //operator = '-';
+            //button -
+            oops = 2;
+            expression = expression + " - ";
+            opps = '-';
         } else 
         if (cmd==("btnfourteen")) {
-            expression = expression + " " + "*" + " ";
-            // operator = '*';
+            //button *
+            oops = 2;
+            expression = expression + " * ";
+            opps = '*';
         } else 
         if (cmd==("btnfifteen")) {
-            expression = expression +  " " + "/" + " ";
-            //operator = '/';
+            //button /
+            oops = 2;
+            expression = expression + " / ";
+            opps = '/';
         } else 
         if (cmd==("btnsixteen")) {
-
+            //button !
             expression = expression + " !" ;
-            //long factorial = 1;
-            //int number;
-            //for (int counter = number; counter >=2;counter--)
-            //factorial = factorial * counter;
+            opps = '!';
         } else 
         if (cmd==("btnseventeen")) {
-            //Button for "Backspace"
+            //button for "Backspace <<"
             int len = expression.length();
             expression = expression.substring(0,len-1);
         } else 
         if (cmd==("btneighteen")) {
-            //Button for "Clear"
+            //button for "Clear C"
             expression = "";
         } else 
         if (cmd==("btnnineteen")) {
@@ -390,13 +389,47 @@ public class TextGUIDemo extends JFrame implements ActionListener {
             expression = expression + ")";
         } else 
         if (cmd==("btntwentyone")) {
-            //button for "OFF";
+            //button for "OFF"
             System.exit(0);
         } else 
-        if (cmd==("btntwentytwo")) { //=
-            ReadOpearator();
-            //result = factorial();
-            expression = "=" + " " + String.valueOf(result);
+        if (cmd==("btntwentytwo")) { 
+            //button for "Equal ="
+            if (opps =='+'){
+                 if (oops == 3)  {
+                 ReadOpearator();
+                 expression = " = " + result;
+                }else if (oops == 2)
+                expression = "Errors - two consecutive operators";
+            }else
+            if (opps =='-'){
+                 if (oops == 3)  {
+                 ReadOpearator();
+                 expression = " = " + result;
+                }else if (oops == 2)
+                expression = "Errors - two consecutive operators";
+            }else
+            if (opps =='*'){
+                 if (oops == 3)  {
+                 ReadOpearator();
+                 expression = " = " + result;
+                }else if (oops == 2)
+                expression = "Errors - two consecutive operators";
+            }else
+            if (opps =='/'){
+                 if (oops == 3)  {
+                 ReadOpearator();
+                 expression = " = " + result;
+                }else if (oops == 2)
+                expression = "Errors - two consecutive operators";
+            }else
+            if (opps =='!'){
+                if (oops == 3)  {
+                result = factorial();
+                expression = " = " + result;    
+                }else if (oops == 2)
+                expression = "Errors - two consecutive operators";
+            }
+        
         }
         textField.setText(expression);
     }
@@ -418,26 +451,18 @@ public class TextGUIDemo extends JFrame implements ActionListener {
             second_number = inScanner.nextDouble();
             invalid = false;
             if (operator.equals ("+")) {
-                //operator = '+';
-                //ReadArguments();
                 addition();
                 invalid = true;
             } else
             if (operator.equals ("-")){
-                //operator = '-';
-                //ReadArguments();
                 subtraction();
                 invalid = true;
             } else
             if (operator.equals ("*")){
-                //operator = '*';
-                //ReadArguments();
                 multiplication(); 
                 invalid = true;
             } else
             if (operator.equals ("/")){
-                //operator = '/';
-                //ReadArguments();
                 division(); 
                 invalid = true;
             }
@@ -450,20 +475,17 @@ public class TextGUIDemo extends JFrame implements ActionListener {
      * An method to perform addition operation
      */
     public double addition() {
-        //perform the clculation
-        //double result;
+        //coding for addition
         result = first_number + second_number;
         expression = expression + result;
         return result;
-
     }
 
     /**
      * An method to perform a subtraction operation
      */
     public double subtraction() {
-        //perform the calculation
-        //double result;
+        //coding for subtraction
         result = first_number - second_number;
         expression = expression + result;
         return result;
@@ -473,8 +495,7 @@ public class TextGUIDemo extends JFrame implements ActionListener {
      * An method to perform division operation
      */
     public double division() {
-        //perform the calculation
-        //double result;
+        //coding for division
         result = first_number / second_number;
         expression = expression + result;
         return result;
@@ -484,8 +505,7 @@ public class TextGUIDemo extends JFrame implements ActionListener {
      * An method to perform multiplication operation
      */
     public double multiplication() {
-        //perform the calculation
-        //double result;
+         //coding for multiplication
         result = first_number * second_number;
         expression = expression + result;
         return result;
@@ -493,13 +513,14 @@ public class TextGUIDemo extends JFrame implements ActionListener {
 
     /**
      * An method to perform factorial operation
+     * 
      */
     public double factorial() {
+        //coding for factorial
         int number;
         long factorial = 1;
         String operator;
         boolean invalid;
-        
         Scanner inScanner = new Scanner (expression);
         number  = inScanner.nextInt();
         operator= inScanner.next();
@@ -507,13 +528,10 @@ public class TextGUIDemo extends JFrame implements ActionListener {
             if (operator.equals ("!")) {
                 for (int i =1; i<= number; i++) {
                     factorial = factorial * i;
-        
                 }
             }
-        return number;
-
+        return factorial;
     }
-
     
     public static void main (String[] args ) {
         TextGUIDemo frame = new TextGUIDemo();
